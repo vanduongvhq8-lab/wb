@@ -79,11 +79,13 @@
 
 <script>
 // ============ ĐIỀN KEY VÀO ĐÂY ============
-const API_KEY = "DÁN_KEY_MISTRAL_CỦA_BẠN";
+const API_KEY = "mstrl_EhdAJKhvYuMCQpLwsJKnFymZuiht1hH6_1w0eMQ";
 const MODEL = "mistral-small-latest";
 // =========================================
 
-const API_URL = "https://api.mistral.ai/v1/chat/completions";
+// Dùng CORS Proxy để vượt qua lỗi Type error khi test trên GitHub Pages
+const TARGET_API = "https://api.mistral.ai/v1/chat/completions";
+const API_URL = "https://corsproxy.io/?" + encodeURIComponent(TARGET_API);
 
 const chatEl = document.getElementById("chat");
 const inputEl = document.getElementById("input");
@@ -126,13 +128,12 @@ async function send() {
       })
     });
 
-    // Log ra console để dễ debug
     console.log("Status:", res.status);
 
     if (!res.ok) {
       const errText = await res.text();
       console.error("Error body:", errText);
-      throw new Error(`HTTP ${res.status} - ${errText}`);
+      throw new Error(`HTTP ${res.status}`);
     }
 
     const data = await res.json();
